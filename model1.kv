@@ -44,25 +44,27 @@ ScreenManager:
     MDBoxLayout:
         md_bg_color: 188/255, 227/255, 217/255, 1
         orientation:'vertical'
-    
+
         MDGridLayout:
             size_hint_y:.75
             cols:3
             padding:[dp(15),dp(15),dp(15),dp(35)]
             spacing:dp(15)
-
+            
             ElementCard:
-                image:"images/rowing1.png"
-                text:"Rowing"
-                
+                image:"images/setting.png"
+                text:"Setting"
+                on_release: app.root.current = ''
             ElementCard:
-                image:"images/rowing1.png"
-                text:"Rowing"
-               
+                image:"images/rowing-boat.png"
+                text:"Training Start"
+                subtext: 'only GPS'
+                on_release: app.root.current = ''
             ElementCard:
-                image:"images/rowing1.png"
-                text:"Rowing"
-
+                image:"images/gps.png"
+                text:"RTK Training Start"
+                subtext: 'Use RTK Positioning System'
+                on_release: app.root.current = ''
 
 <ElementCard@MDCard>:
     md_bg_color: 120/255, 173/255, 173/255, 1
@@ -75,19 +77,24 @@ ScreenManager:
     items_count:""
     subtext:''
 
-    orientation:'vertical'
+    orientation: 'vertical'
     Image:
-        source:root.image
+        source: root.image
     MDBoxLayout:
-        orientation:'vertical'
+        orientation: 'vertical'
         MDLabel:
-            halign:"center"
-            text:root.text
-            font_size: "15sp" 
+            halign: "center"
+            text: root.text
+            theme_text_color: "Custom"
+            text_color: 255,255,255
+            font_size: "20sp"
+            bold:True
+        
         MDLabel:
-            halign:"center"
-            font_style:"Caption"
-            text:root.subtext
+            halign: "center"
+            font_style: "Caption"
+            text: root.subtext
+        
         MDLabel:
-            halign:"center"
-            text:root.items_count
+            halign: "center"
+            text: root.items_count
