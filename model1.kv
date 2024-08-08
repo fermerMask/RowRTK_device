@@ -54,7 +54,7 @@ ScreenManager:
             ElementCard:
                 image:"images/setting.png"
                 text:"Setting"
-                on_release: app.root.current = ''
+                on_release: app.root.current = 'rtkactivation'
             ElementCard:
                 image:"images/rowing-boat.png"
                 text:"Training Start"
@@ -98,3 +98,10 @@ ScreenManager:
         MDLabel:
             halign: "center"
             text: root.items_count
+
+<RTKActivationScreen>
+    name: 'rtkactivation'
+    MDBoxLayout:
+        md_bg_color: 180/255, 252/255, 190/255, 1
+        orientation:'vertical'
+
