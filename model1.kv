@@ -1,0 +1,93 @@
+ScreenManager:
+    SplashScreen:
+    MainScreen:
+    RTKActivationScreen:
+    RTKSetupScreen:
+
+<SplashScreen>:
+    name: 'splash'    
+    MDFloatLayout:
+        md_bg_color: 188/255, 227/255, 217/255, 1
+        Image:
+            source: "images/rowing1.png"
+            size_hint: .50, .50
+            pos_hint: {"center_x": .54, "center_y": .6}
+            canvas.before:
+                Color:
+                    rgb: 1, .85, .825, 1
+        
+        MDIconButton:
+            icon: "chevron-right"
+            user_font_size: "35sp"
+            pos_hint: {"center_x": .5, "center_y": .12}      
+            on_press: app.root.current = 'main'   
+                    
+
+        MDLabel:
+            text: "Welcom to RowRTK"   
+            pos_hint: {"center_x": .5, "center_y": .28}       
+            halign: "center"
+            theme_text_color: "Custom"
+            text_color: 0, 0, 0
+            font_size:"35sp"
+
+        MDLabel:
+            text: "Getting Start RowRTK"   
+            pos_hint: {"center_x": .5, "center_y": .21}       
+            halign: "center"
+            theme_text_color: "Custom"
+            text_color: 0, 0, 0 
+            font_size:"13sp"
+
+<MainScreen>:
+    name: 'main'
+    MDBoxLayout:
+        md_bg_color: 188/255, 227/255, 217/255, 1
+        orientation:'vertical'
+    
+        MDGridLayout:
+            size_hint_y:.75
+            cols:3
+            padding:[dp(15),dp(15),dp(15),dp(35)]
+            spacing:dp(15)
+
+            ElementCard:
+                image:"images/rowing1.png"
+                text:"Rowing"
+                
+            ElementCard:
+                image:"images/rowing1.png"
+                text:"Rowing"
+               
+            ElementCard:
+                image:"images/rowing1.png"
+                text:"Rowing"
+
+
+<ElementCard@MDCard>:
+    md_bg_color: 120/255, 173/255, 173/255, 1
+    padding:dp(10)
+    spacing:dp(10)
+    radius:dp(25)
+    ripple_behavior: True
+    image:''
+    text:""
+    items_count:""
+    subtext:''
+
+    orientation:'vertical'
+    Image:
+        source:root.image
+    MDBoxLayout:
+        orientation:'vertical'
+        MDLabel:
+            halign:"center"
+            text:root.text
+            font_size: "15sp" 
+        MDLabel:
+            halign:"center"
+            font_style:"Caption"
+            text:root.subtext
+        MDLabel:
+            halign:"center"
+            text:root.items_count
