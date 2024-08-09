@@ -107,19 +107,27 @@ ScreenManager:
         MDToolbar:
             title: "RowRTK only use GPS"
             left_action_items: [["arrow-left",lambda x: root.back_screen()]]
+            elevation: 10
+            md_bg_color: 188/255, 227/255, 217/255, 1
 
         MDBoxLayout:
             orientation: 'vertical'
-            padding: 10  
-            spacing: 10  
+            padding: 10  # 全体にパディングを追加
+            spacing: 10  # セクション間のスペースを設定
 
-            MapView:
-                lat: 135
-                lon: 35
-                zoom:13
-            MapMarkerPopup:
-                lat: 135
-                lon: 35
+            # 上部の画面 (時計)
+            BoxLayout:
+                size_hint_y: 0.5
+                padding: [10, 20]  # 上下にパディングを追加
+
+                canvas.before:
+                    Color:
+                        rgba: 0.9, 0.9, 0.9, 1  # 背景色を指定
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [20]  # 角を丸くする
+
                 MDLabel:
                     id: time_label
                     text: "00:00:00"
@@ -127,20 +135,22 @@ ScreenManager:
                     theme_text_color: "Primary"
                     font_style: "H2"
 
-            MDBoxLayout:
+            # 下部の画面 (2分割)
+            BoxLayout:
                 size_hint_y: 0.5
-                spacing: 10  
+                spacing: 10  # 左右のセクション間のスペースを設定
 
-                MDBoxLayout:
-                    padding: [10, 20]  
+                # 左側の画面 (日付)
+                BoxLayout:
+                    padding: [10, 20]  # 上下にパディングを追加
 
                     canvas.before:
                         Color:
-                            rgba: 0.9, 0.9, 0.9, 1  
+                            rgba: 0.9, 0.9, 0.9, 1  # 背景色を指定
                         RoundedRectangle:
                             pos: self.pos
                             size: self.size
-                            radius: [20]  
+                            radius: [20]  # 角を丸くする
 
                     MDLabel:
                         id: date_label
@@ -149,17 +159,17 @@ ScreenManager:
                         theme_text_color: "Primary"
                         font_style: "H4"
 
-             
-                MDBoxLayout:
-                    padding: [10, 20]  
+                # 右側の画面 (適当なデータ)
+                BoxLayout:
+                    padding: [10, 20]  # 上下にパディングを追加
 
                     canvas.before:
                         Color:
-                            rgba: 0.9, 0.9, 0.9, 1 
+                            rgba: 0.9, 0.9, 0.9, 1  # 背景色を指定
                         RoundedRectangle:
                             pos: self.pos
                             size: self.size
-                            radius: [20]  
+                            radius: [20]  # 角を丸くする
 
                     MDLabel:
                         text: "Sample Data"
