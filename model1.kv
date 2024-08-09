@@ -54,12 +54,12 @@ ScreenManager:
             ElementCard:
                 image:"images/setting.png"
                 text:"Setting"
-                on_release: app.root.current = 'rtkactivation'
+                on_release: app.root.current = ''
             ElementCard:
                 image:"images/rowing-boat.png"
                 text:"Training Start"
                 subtext: 'only GPS'
-                on_release: app.root.current = ''
+                on_release: app.root.current = 'rtkactivation'
             ElementCard:
                 image:"images/gps.png"
                 text:"RTK Training Start"
@@ -102,6 +102,67 @@ ScreenManager:
 <RTKActivationScreen>
     name: 'rtkactivation'
     MDBoxLayout:
-        md_bg_color: 180/255, 252/255, 190/255, 1
-        orientation:'vertical'
+        orientation: "vertical"
 
+        MDToolbar:
+            title: "RowRTK only use GPS"
+            left_action_items: [["arrow-left",lambda x: root.back_screen()]]
+
+        MDBoxLayout:
+            orientation: 'vertical'
+            padding: 10  
+            spacing: 10  
+
+            MapView:
+                lat: 135
+                lon: 35
+                zoom:13
+            MapMarkerPopup:
+                lat: 135
+                lon: 35
+                MDLabel:
+                    id: time_label
+                    text: "00:00:00"
+                    halign: "center"
+                    theme_text_color: "Primary"
+                    font_style: "H2"
+
+            MDBoxLayout:
+                size_hint_y: 0.5
+                spacing: 10  
+
+                MDBoxLayout:
+                    padding: [10, 20]  
+
+                    canvas.before:
+                        Color:
+                            rgba: 0.9, 0.9, 0.9, 1  
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [20]  
+
+                    MDLabel:
+                        id: date_label
+                        text: "YYYY-MM-DD"
+                        halign: "center"
+                        theme_text_color: "Primary"
+                        font_style: "H4"
+
+             
+                MDBoxLayout:
+                    padding: [10, 20]  
+
+                    canvas.before:
+                        Color:
+                            rgba: 0.9, 0.9, 0.9, 1 
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [20]  
+
+                    MDLabel:
+                        text: "Sample Data"
+                        halign: "center"
+                        theme_text_color: "Primary"
+                        font_style: "H4"
