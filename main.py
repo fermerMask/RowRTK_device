@@ -2,7 +2,7 @@ from kivymd.app import MDApp
 from kivy.uix.screenmanager import Screen, ScreenManager
 from kivy.core.window import Window
 from kivy.lang import Builder
-from kivy_garden.mapview import MapView
+
 Window.size = (640,480)
 
 global screen
@@ -21,11 +21,13 @@ class RTKActivationScreen(Screen):
         self.manager.current = self.manager.previous()
 
 class RTKSetupScreen(Screen):
-    pass
+    def back_screen(self):
+        self.manager.current = self.manager.previous()
 
 screen.add_widget(SplashScreen(name='splash'))
 screen.add_widget(MainScreen(name='main'))
 screen.add_widget(RTKActivationScreen(name='rtkactivation'))
+screen.add_widget(RTKSetupScreen(name='setting'))
 
 
 class RowRTK(MDApp):
