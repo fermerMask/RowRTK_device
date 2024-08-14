@@ -2,7 +2,7 @@ from kivymd.app import MDApp
 from kivy.uix.screenmanager import Screen, ScreenManager
 from kivy.core.window import Window
 from kivy.lang import Builder
-from Lib import rtklib
+from RTKLib import (rtklib)
 
 Window.size = (640,480)
 
