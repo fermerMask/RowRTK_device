@@ -1,0 +1,71 @@
+<RTKController>:
+    orientation: 'vertical'
+    
+    TextInput:
+        id: base_input
+        hint_text: 'Base Station URL'
+    
+    TextInput:
+        id: rover_to_input
+        hint_text: 'Rover To'
+    
+    Button:
+        id: connect_button
+        text: 'Connect Base'
+        on_press: root.connect_base()
+    
+    Button:
+        id: disconnect_button
+        text: 'Disconnect Base'
+        disabled: True
+        on_press: root.disconnect_base()
+    
+    TextInput:
+        id: logfile_input
+        hint_text: 'Logfile'
+    
+    TextInput:
+        id: rover_from_input
+        hint_text: 'Rover From'
+    
+    Button:
+        id: start_button
+        text: 'Start'
+        on_press: root.start()
+    
+    Button:
+        id: stop_button
+        text: 'Stop'
+        disabled: True
+        on_press: root.stop()
+    
+    BoxLayout:
+        orientation: 'horizontal'
+        
+        Label:
+            text: 'Latitude:'
+        Label:
+            text: root.lat
+        
+        Label:
+            text: 'Longitude:'
+        Label:
+            text: root.lon
+        
+    BoxLayout:
+        orientation: 'horizontal'
+        
+        Label:
+            text: 'Mode:'
+        Label:
+            text: root.mode
+        
+        Label:
+            text: 'Velocity:'
+        Label:
+            text: root.vel
+        
+        Label:
+            text: 'Altitude:'
+        Label:
+            text: root.alt

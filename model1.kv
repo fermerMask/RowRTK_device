@@ -1,9 +1,13 @@
 ScreenManager:
     SplashScreen:
     MainScreen:
+        name: 'main'
     RTKActivationScreen:
+        name: 'rtkactivation'
     RTKSetupScreen:
+        name: 'setting'
     StandaloneScreen:
+        name: 'standalone'
 
 <SplashScreen>:
     name: 'splash'    
@@ -107,7 +111,7 @@ ScreenManager:
 
         MDToolbar:
             title: "GPS stand alone"
-            left_action_items: [["arrow-left",lambda x: root.back_screen()]]
+            left_action_items: [["arrow-left",lambda x: setattr(root.manager,'current','main')]]
             md_bg_color: 188/255, 227/255, 217/255, 1
             elevation: 10
         
@@ -131,7 +135,7 @@ ScreenManager:
             MDBottomAppBar:
                 md_bg_color: 188/255, 227/255, 217/255, 1
                 MDToolbar:
-                    icon: "git"
+                    icon: "play-box"
                     type: "bottom"
                     icon_color:0.8,0.2,0.2,1
 
@@ -141,8 +145,8 @@ ScreenManager:
         orientation: "vertical"
 
         MDToolbar:
-            title: "RowRTK only use GPS"
-            left_action_items: [["arrow-left",lambda x: root.back_screen()]]
+            title: "Using RTK Positioning System"
+            left_action_items: [["arrow-left",lambda x: setattr(root.manager,'current','main')]]
             elevation: 10
             md_bg_color: 188/255, 227/255, 217/255, 1
 
@@ -214,81 +218,44 @@ ScreenManager:
                         theme_text_color: "Primary"
                         font_style: "H4"
 
-<RTKSetupScreen>
+<RTKSetupScreen>:
     name: 'setting'
     MDBoxLayout:
         orientation: "vertical"
 
         MDToolbar:
             title: "Setting"
-            left_action_items: [["arrow-left",lambda x: root.back_screen()]]
+            left_action_items: [["arrow-left", lambda x: setattr(root.manager, 'current', 'main')]]
             elevation: 10
             md_bg_color: 188/255, 227/255, 217/255, 1
 
         MDBoxLayout:
             orientation: 'vertical'
-            padding: 10  # 全体にパディングを追加
-            spacing: 10  # セクション間のスペースを設定
+            padding: 10
+            spacing: 10
 
-            # 上部の画面 (時計)
-            MDBoxLayout:
-                size_hint_y: 0.5
-                padding: [10, 20]  # 上下にパディングを追加
+            # Base Station Selection
+            MDTextField:
+                id: base_station
+                hint_text: "Enter Base Station URL"
+                on_text_validate: root.on_base_station_changed()
 
-                canvas.before:
-                    Color:
-                        rgba: 0.9, 0.9, 0.9, 1  # 背景色を指定
-                    RoundedRectangle:
-                        pos: self.pos
-                        size: self.size
-                        radius: [20]  # 角を丸くする
+            # Log File Location
+            MDTextField:
+                id: log_file
+                hint_text: "Enter Log File Location"
+                readonly: True
 
-                MDLabel:
-                    id: time_label
-                    text: "00:00:00"
-                    halign: "center"
-                    theme_text_color: "Primary"
-                    font_style: "H2"
+            # Button to Open File Manager
+            MDRectangleFlatIconButton:
+                icon: "folder"
+                text: "Select Log File Location"
+                on_press: root.open_file_manager()
+                pos_hint: {"center_x": 0.5}
 
-
-            # 下部の画面 (2分割)
-            MDBoxLayout:
-                size_hint_y: 0.5
-                spacing: 10  # 左右のセクション間のスペースを設定
-
-                # 左側の画面 (日付)
-                BoxLayout:
-                    padding: [10, 20]  # 上下にパディングを追加
-
-                    canvas.before:
-                        Color:
-                            rgba: 0.9, 0.9, 0.9, 1  # 背景色を指定
-                        RoundedRectangle:
-                            pos: self.pos
-                            size: self.size
-                            radius: [20]  # 角を丸くする
-
-                    MDLabel:
-                        id: date_label
-                        text: "YYYY-MM-DD"
-                        halign: "center"
-                        theme_text_color: "Primary"
-                        font_style: "H4"
-
-                # 右側の画面 (適当なデータ)
-                MDBoxLayout:
-                    padding: [10, 20]
-
-                    canvas.before:
-                        Color:
-                            rgba: 0.9, 0.9, 0.9, 1
-                        RoundedRectangle:
-                            pos: self.pos
-                            size: self.size
-                            radius: [20]
-
-                    MDLabel:
-                        text: "Sample Data"
-                        halign: "center"
-                        theme_text_color: "Primary"
-                        font_style: "H4"
+            # Button to Save Configurations
+            MDRectangleFlatIconButton:
+                icon: "content-save"
+                text: "Save Configuration"
+                on_press: root.save_config()
+                pos_hint: {"center_x": 0.5}

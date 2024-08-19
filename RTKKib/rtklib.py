@@ -95,16 +95,7 @@ class RTKController:
     # rover_to = rover_to_f9p
     # rover_from = rover_from_f9p
 
-    def info(self, message):
-        self.text_message.insert(tk.END, message)
-        self.text_message.see(tk.END)
-
-    def connect_base(self):
-        self.button_connect['state'] = 'disabled'
-        base = self.textbox_base.get()
-        rover_to = self.textbox_rover_to.get()
-        self.info(f'connecting {base} to {rover_to}\n')
-
+    def connect_base(self,base,rover_to):
         cmd = f'exec {self.str2str} -in ntrip://{base} -out serial://{rover_to}'
         self.info(cmd + '\n')
         self.p_base = subprocess.Popen(cmd, shell=True, stdout=PIPE, stderr=PIPE, text=True)
