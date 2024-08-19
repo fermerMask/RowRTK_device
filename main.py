@@ -6,6 +6,7 @@ from kivymd.uix.filemanager import MDFileManager
 from RTKKib import rtklib
 import os
 import json
+from datetime import datetime
 Window.size = (640,480)
 
 nmea = rtklib.NMEA
@@ -20,9 +21,24 @@ class SplashScreen(Screen):
 class MainScreen(Screen):
     pass
 
-class StandaloneScreen(Screen):  
+class StandaloneScreen(Screen): 
+
+    def start_stop_toggle(self):
+        if self.ids.start_stop_button.icon == "play":
+            self.ids.start_stop_button.icon = "pause"
+            self.ids.start_stop_button.text = "Pause"
+            #self.ids.stop_button.disable = False
+            self.start()
+        else:
+            self.ids.start_stop_button.icon = "play"
+            self.ids.start_stop_button.text = "Start"
+            self.stop()
+
     def start(self):
-        rtklib.start()
+        print("start")
+
+    def stop(self):
+        print("stop")
 
 class RTKActivationScreen(Screen):
    pass
