@@ -111,15 +111,16 @@ ScreenManager:
 
         MDToolbar:
             title: "GPS stand alone"
-            left_action_items: [["arrow-left",lambda x: setattr(root.manager,'current','main')]]
+            left_action_items: [["arrow-left", lambda x: setattr(root.manager, 'current', 'main')]]
             md_bg_color: 188/255, 227/255, 217/255, 1
             elevation: 10
         
         MDBoxLayout:
             orientation: 'vertical'
 
+            # OpenStreetMap Widget
             MDBoxLayout:
-                size_hint_y: 0.5
+                size_hint_y: 0.7
                 padding: [10,20]
 
                 canvas.before:
@@ -129,15 +130,30 @@ ScreenManager:
                             pos: self.pos
                             size: self.size
                             radius: [20]
-                MDTextField:
-                    hint_text: "this is velocity"
+                
+                # OpenStreetMapウィジェットのためのプレースホルダー（適切なウィジェットで置き換えてください）
+                Widget:
+                    id: map_widget
+                    # ここにOpenStreetMapウィジェットを追加
+
+            # 速度データ表示
+            MDBoxLayout:
+                size_hint_y: 0.1
+                padding: [10, 10]
+                md_bg_color: 188/255, 227/255, 217/255, 1
+                MDLabel:
+                    id: velocity_label
+                    text: "Speed: 0.00"
+                    halign: "center"
+                    theme_text_color: "Primary"
+                    font_style: "H6"
 
             MDBottomAppBar:
                 md_bg_color: 188/255, 227/255, 217/255, 1
                 MDToolbar:
                     icon: "play-box"
                     type: "bottom"
-                    icon_color:0.8,0.2,0.2,1
+                    icon_color: 0.8, 0.2, 0.2, 1
 
 <RTKActivationScreen>
     name: 'rtkactivation'
