@@ -117,11 +117,15 @@ ScreenManager:
 
         MDBoxLayout:
             orientation: 'vertical'
+            padding: 5
+            spacing: 5
+            md_bg_color: 0.9,0.9,0.9,1
 
             # Speed Data Display
             MDBoxLayout:
-                size_hint_y: 0.4
-                padding: [10, 10]
+                size_hint_y: 0.5
+                padding: [10, 20]
+                height: dp(230)
                 canvas.before:
                     Color:
                         rgba: 1, 1, 1, 1
@@ -136,25 +140,54 @@ ScreenManager:
                     halign: "center"
                     theme_text_color: "Primary"
                     font_style: "H4"
-
-            # Start and Stop Buttons
-            MDBoxLayout:
-                orientation: "horizontal"
-                size_hint_y: 0.2
-                spacing: 20
+            
+            MDGridLayout:
+                cols:2
+                size_hint_y: None
+                height: dp(130)
                 padding: [10, 10]
-                md_bg_color: 188/255, 227/255, 217/255, 1
+                spacing: 10
 
-                MDFillRoundFlatIconButton:
-                    id: start_stop_button
-                    icon: "play"
-                    text: "Start"
-                    pos_hint: {"center_x": 0.5}
-                    on_release:
-                        root.start_stop_toggle()
-                
-                
+                MDLabel:
+                    text: "Time"
+                    halign: "center"
 
+                MDLabel:
+                    id: time
+                    text: "0:00:0"
+                    font_style: "H6"
+                    halign: "center"
+
+                MDLabel:
+                    text: "velocity(m/s)"
+                    halign: "center"
+
+                MDLabel:
+                    id: velocity
+                    text: "0.00"
+                    font_style: "H6"
+                    halign: "center"
+                
+                MDLabel:
+                    text: "Distance(km)"
+                    halign: "center"
+
+                MDLabel:
+                    id: distance
+                    text: "0.00"
+                    font_style: "H6"
+                    halign: "center"
+            
+            # Start and Stop Buttons
+
+            MDFillRoundFlatIconButton:
+                
+                id: start_stop_button
+                icon: "play"
+                text: "Start"
+                pos_hint: {"center_x": 0.5}
+                on_release:
+                    root.start_stop_toggle()
 
 <RTKActivationScreen>
     name: 'rtkactivation'
