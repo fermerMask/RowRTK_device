@@ -3,6 +3,8 @@ from kivy.uix.screenmanager import Screen, ScreenManager
 from kivy.core.window import Window
 from kivy.lang import Builder
 from kivymd.uix.filemanager import MDFileManager
+from tkinter import filedialog
+from kivy.uix.popup import Popup
 from RTKKib import rtklib
 import os
 import json
@@ -11,6 +13,8 @@ Window.size = (640,480)
 
 nmea = rtklib.NMEA
 logger = rtklib.Logger
+controller = rtklib.RTKController
+
 global screen
 
 screen = ScreenManager()
@@ -35,9 +39,11 @@ class StandaloneScreen(Screen):
             self.stop()
 
     def start(self):
+        controller.start()
         print("start")
 
     def stop(self):
+        controller.stop()
         print("stop")
 
 class RTKActivationScreen(Screen):
@@ -46,16 +52,14 @@ class RTKActivationScreen(Screen):
 class RTKSetupScreen(Screen):
     config_file = 'config.json'
 
-    def open_file_manager(self):
-        self.file_manager.show(os.path.expanduser("~"))
-    
+    def select_directory(self):
+        directory = filedialog.askdirectory()
+        if directory:
+            self.select_path(str(directory))
+            
     def select_path(self,path):
         self.ids.log_file.text = path
         self.save_config()
-        self.exit_manger()
-    
-    def exit_manager(self,*args):
-        self.file_manager.close()
     
     def on_pre_enter(self):
         self.load_config()
@@ -63,7 +67,9 @@ class RTKSetupScreen(Screen):
     def save_config(self):
         config_data = {
             'base_station':self.ids.base_station.text,
-            'log_file': self.ids.log_file.text
+            'log_file': self.ids.log_file.text,
+            'rover_to': self.ids.rover_to.text,
+            'rover_from': self.ids.rover_from.text
         }
         with open(self.config_file,'w') as f:
             json.dump(config_data,f)
@@ -74,17 +80,17 @@ class RTKSetupScreen(Screen):
                 config_data = json.load(f)
             self.ids.base_station.text = config_data.get('base_station','')
             self.ids.log_file.text = config_data.get('log_file','')
+            self.ids.rover_to.text = config_data.get('rover_to','')
+            self.ids.rover_from.text = config_data.get('rover_from','')
     
     def on_base_station_changed(self):
         self.save_config()
-
 
 screen.add_widget(SplashScreen(name='splash'))
 screen.add_widget(MainScreen(name='main'))
 screen.add_widget(RTKSetupScreen(name='setting'))
 screen.add_widget(StandaloneScreen(name='standalone'))
 screen.add_widget(RTKActivationScreen(name='rtkactivation'))
-
 
 
 class RowRTK(MDApp):

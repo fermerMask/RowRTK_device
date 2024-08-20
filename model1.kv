@@ -288,7 +288,7 @@ ScreenManager:
             MDTextField:
                 id: base_station
                 hint_text: "Enter Base Station URL"
-                on_text_validate: root.on_base_station_changed()
+                on_text_validate: root.setting_changed()
 
             # Log File Location
             MDTextField:
@@ -296,16 +296,33 @@ ScreenManager:
                 hint_text: "Enter Log File Location"
                 readonly: True
 
+            MDTextField:
+                id: rover_to
+                hint_text: "Enter rover to speed"
+            
+            MDTextField:
+                id: rover_from
+                hint_text: "Enter rover from speed"
+            
             # Button to Open File Manager
-            MDRectangleFlatIconButton:
-                icon: "folder"
-                text: "Select Log File Location"
-                on_press: root.open_file_manager()
-                pos_hint: {"center_x": 0.5}
+            MDGridLayout:
+                cols:2
+                size_hint_y: None
+                height: dp(130)
+                padding: [10, 10]
+                spacing: 10
 
-            # Button to Save Configurations
-            MDRectangleFlatIconButton:
-                icon: "content-save"
-                text: "Save Configuration"
-                on_press: root.save_config()
-                pos_hint: {"center_x": 0.5}
+                # setting folder
+                MDRectangleFlatIconButton:
+                    icon: "folder"
+                    text: "Select Log File Location"
+                    on_press: root.select_directory()
+                    pos_hint: {"center_x": 0.5}
+
+
+                # save Configuration
+                MDRectangleFlatIconButton:
+                    icon: "content-save"
+                    text: "Save Configuration"
+                    on_press: root.save_config()
+                    pos_hint: {"center_x": 0.5}

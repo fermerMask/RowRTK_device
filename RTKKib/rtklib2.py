@@ -110,7 +110,59 @@ class RTKController:
         self.p_base.kill()
         self.info(f'base station disconnected.\n')
     
-    def start(self):
+    def start(self,log,rover):
+        logfile = log
+        rover_from = rover
+        self.info(f'start gnss positioning')
+
+        port, bps = rover_from.split(':')
+        cmd = f'exec cu -s {bps} -l /dev/{port}'
+        self.info(cmd + '\n')
+        self.p_rtk = subprocess.Popen(cmd, shell=True, stdin=PIPE,stdout=PIPE,stderr=PIPE,text=True)
+        self.th_logger = Logger(self.p_rtk,logfile)
+        self.th_logger.start()
+
+        self.th_updater = threading.Thread(target=self.update_status,daemon=True)
+        self.kill_update = False
+        self.th_updater.start()
+
+    def update_text(self,text,value):
         pass
-    
+
+    def update_status(self):
+        logger = self.th_logger
+        while not self.kill_update:
+            t, lat, lon, mode, alt, vel = logger.t, logger.lat, logger.lon,logger.mode, logger.alt, logger.vel
+            self.update_text()
+            self.update_text()
+            self.update_text()
+            self.update_text()
+
+            if mode == 0:
+                pass
+            elif mode == 1:
+                pass
+            elif mode == 2:
+                pass
+            elif mode == 3:
+                pass
+            elif mode == 4:
+                pass
+            elif mode == 5:
+                pass
+            time.sleep(0.5)
+
+    def stop(self):
+        self.kill_update = True
+        self.th_updater.kill = True
+        self.th_updater.join()
+
+        self.th_logger.kill = True
+        self.th_logger.join()
+        self.p_rtk.stdin('~.')
+        time.sleep(1)
+        self.p_rtk.kill()
+
+        self.info(f'stop GNSS positioning.\n')
+
 
