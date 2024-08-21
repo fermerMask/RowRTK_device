@@ -7,6 +7,7 @@ from tkinter import filedialog
 from kivy.uix.popup import Popup
 from RTKKib.rtklib2 import NMEA,RTKController
 from RTKKib.configmanager import ConfigManager
+from kivy.properties import StringProperty
 import os
 import json
 from datetime import datetime
@@ -24,6 +25,13 @@ class MainScreen(Screen):
 
 class StandaloneScreen(Screen):
     config_file = 'config.json'
+    
+    velocity = StringProperty("0.00")
+    time = StringProperty("0:00.0")
+    longitude = StringProperty("000.0000")
+    latitude = StringProperty("00.0000")
+    mode = StringProperty("N/A")
+    
     def start_stop_toggle(self):
         if self.ids.start_stop_button.icon == "play":
             self.ids.start_stop_button.icon = "pause"
@@ -37,14 +45,23 @@ class StandaloneScreen(Screen):
 
     def start(self):
         config_manager = ConfigManager(self.config_file)
-        base_station = config_manager.get_value('base_station')
+        
         folder = config_manager.get_value('log_file')
-        #controller.start()
-        print(base_station)
-
+        rover_from = config_manager.get_value('rover_from')
+        
+        self.rtk_controller = RTKController(update_callback=self.update_display)
+    
     def stop(self):
-        #controller.stop()
+        RTKController.stop()
         print("stop")
+
+    def update_display(self,data):
+        self.time = data['time']
+        self.latitude = data['latitude']
+        self.longitude = data['longitude']
+        self.mode = data['mode']
+        self.velocity = data['velocity']
+        self.alt = data['alt']
 
 class RTKActivationScreen(Screen):
     config_file = 'config.json'

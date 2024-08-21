@@ -96,6 +96,13 @@ class RTKController:
     # rover_to = rover_to_f9p
     # rover_from = rover_from_f9p
 
+    def __init__(self,update_callback=None):
+        self.update_callback = update_callback
+        
+
+    def info(self,message):
+        print(message)
+    
     def connect_base(self,base,rover_to):
         cmd = f'exec{self.str2str} -in ntrip://{base} -out serial://{rover_to}'
         self.info(cmd + '\n')
@@ -110,25 +117,22 @@ class RTKController:
         self.p_base.kill()
         self.info(f'base station disconnected.\n')
     
-    def start(self,log,rover):
+    def start(self,log,rover_from):
         logfile = log
-        rover_from = rover
+        rover_from = rover_from
         self.info(f'start gnss positioning')
 
         port, bps = rover_from.split(':')
         cmd = f'exec cu -s {bps} -l /dev/{port}'
         self.info(cmd + '\n')
         self.p_rtk = subprocess.Popen(cmd, shell=True, stdin=PIPE,stdout=PIPE,stderr=PIPE,text=True)
-        self.th_logger = Logger(self.p_rtk,logfile)
+        self.th_logger = Logger(self.p_rtk, logfile)
         self.th_logger.start()
 
         self.th_updater = threading.Thread(target=self.update_status,daemon=True)
         self.kill_update = False
         self.th_updater.start()
-
-    def update_text(self,text,value):
-        pass
-
+    """
     def update_status(self):
         logger = self.th_logger
         while not self.kill_update:
@@ -151,7 +155,23 @@ class RTKController:
             elif mode == 5:
                 pass
             time.sleep(0.5)
-
+    """
+    def update_status(self):
+        logger = self.th_logger
+        while not self.kill_update:
+            t,lat,lon,alt,vel = logger.t, logger.lat, logger.lon, logger.mode,logger.alt,logger.vel
+            data = {
+                'time': t,
+                'latitude': lat,
+                'longitude': lon,
+                'alt': alt,
+                'velocity': vel
+            }
+        
+        if self.update_callback:
+            self.update_callback(data)
+        
+        time.sleep(0.5)
     def stop(self):
         self.kill_update = True
         self.th_updater.kill = True

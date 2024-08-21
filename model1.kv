@@ -137,13 +137,13 @@ ScreenManager:
 
                 MDLabel:
                     id: velocity_label
-                    text: "Speed: 0.00"
+                    text: root.velocity
                     halign: "center"
                     theme_text_color: "Primary"
                     font_style: "H4"
             
             MDGridLayout:
-                cols:2
+                cols: 4
                 size_hint_y: None
                 height: dp(130)
                 padding: [10, 10]
@@ -155,7 +155,7 @@ ScreenManager:
 
                 MDLabel:
                     id: time
-                    text: "0:00:0"
+                    text: root.time
                     font_style: "H6"
                     halign: "center"
 
@@ -165,10 +165,10 @@ ScreenManager:
 
                 MDLabel:
                     id: velocity
-                    text: "0.00"
+                    text: root.velocity
                     font_style: "H6"
                     halign: "center"
-                
+                    
                 MDLabel:
                     text: "Distance(km)"
                     halign: "center"
@@ -178,9 +178,39 @@ ScreenManager:
                     text: "0.00"
                     font_style: "H6"
                     halign: "center"
-            
-            # Start and Stop Buttons
+                
+                MDLabel:
+                    text: "Mode"
+                    halign: "center"
 
+                MDLabel:
+                    id: mode
+                    text: root.mode
+                    font_style: "H6"
+                    theme_text_color: "Custom"
+                    halign: "center"
+                    text_color: 1,0,0,1
+
+                MDLabel:
+                    text: "latitude"
+                    halign: "center"
+                
+                MDLabel:
+                    id: lat
+                    text: root.latitude
+                    font_style: "H6"
+                    halign: "center"
+                
+                MDLabel:
+                    text: "longitude"
+                    halign: "center"
+                
+                MDLabel:
+                    id: lon
+                    text: root.longitude
+                    font_style: "H6"
+                    halign: "center"
+            
             MDFillRoundFlatIconButton:
                 id: start_stop_button
                 icon: "play"
