@@ -104,6 +104,7 @@ ScreenManager:
             halign: "center"
             text: root.items_count
 
+
 <StandaloneScreen>
     name: 'standalone'
     MDBoxLayout:
@@ -181,7 +182,6 @@ ScreenManager:
             # Start and Stop Buttons
 
             MDFillRoundFlatIconButton:
-                
                 id: start_stop_button
                 icon: "play"
                 text: "Start"
@@ -190,7 +190,7 @@ ScreenManager:
                     root.start_stop_toggle()
 
 <RTKActivationScreen>
-    name: 'rtkactivation'
+    name: 'rtkactivation'   
     MDBoxLayout:
         orientation: "vertical"
 
@@ -202,21 +202,20 @@ ScreenManager:
 
         MDBoxLayout:
             orientation: 'vertical'
-            padding: 10  # 全体にパディングを追加
-            spacing: 10  # セクション間のスペースを設定
+            padding: 5
+            spacing: 5
+            md_bg_color: 0.9,0.9,0.9,1
 
-            # 上部の画面 (時計)
             MDBoxLayout:
                 size_hint_y: 0.5
-                padding: [10, 20]  # 上下にパディングを追加
-
+                padding: [10, 20]
                 canvas.before:
                     Color:
-                        rgba: 0.9, 0.9, 0.9, 1  # 背景色を指定
+                        rgba: 1, 1, 1, 1
                     RoundedRectangle:
                         pos: self.pos
                         size: self.size
-                        radius: [20]  # 角を丸くする
+                        radius: [20]
 
                 MDLabel:
                     id: time_label
@@ -224,49 +223,85 @@ ScreenManager:
                     halign: "center"
                     theme_text_color: "Primary"
                     font_style: "H2"
+                
+            MDGridLayout:
+                cols: 4
+                size_hint_y: None
+                height: dp(130)
+                padding: [10, 10]
+                spacing: 10
+
+                MDLabel:
+                    text: "Time"
+                    halign: "center"
+
+                MDLabel:
+                    id: time
+                    text: "0:00:0"
+                    font_style: "H6"
+                    halign: "center"
+
+                MDLabel:
+                    text: "velocity(m/s)"
+                    halign: "center"
+
+                MDLabel:
+                    id: velocity
+                    text: "0.00"
+                    font_style: "H6"
+                    halign: "center"
+                    
+                MDLabel:
+                    text: "Distance(km)"
+                    halign: "center"
+
+                MDLabel:
+                    id: distance
+                    text: "0.00"
+                    font_style: "H6"
+                    halign: "center"
+                
+                MDLabel:
+                    text: "Mode"
+                    halign: "center"
+
+                MDLabel:
+                    id: mode
+                    text: "No fix"
+                    font_style: "H6"
+                    theme_text_color: "Custom"
+                    halign: "center"
+                    text_color: 1,0,0,1
+
+                MDLabel:
+                    text: "latitude"
+                    halign: "center"
+                
+                MDLabel:
+                    id: lat
+                    text: "00.0000"
+                    font_style: "H6"
+                    halign: "center"
+                
+                MDLabel:
+                    text: "longitude"
+                    halign: "center"
+                
+                MDLabel:
+                    id: lon
+                    text: "000.0000"
+                    font_style: "H6"
+                    halign: "center"
+            
+            MDFillRoundFlatIconButton:
+                id: connect_button
+                icon: "lan-connect"
+                text: "Start"
+                pos_hint: {"center_x": 0.5}
+                on_release:
+                    root.connect_toggle()
 
 
-            # 下部の画面 (2分割)
-            MDBoxLayout:
-                size_hint_y: 0.5
-                spacing: 10  # 左右のセクション間のスペースを設定
-
-                # 左側の画面 (日付)
-                BoxLayout:
-                    padding: [10, 20]  # 上下にパディングを追加
-
-                    canvas.before:
-                        Color:
-                            rgba: 0.9, 0.9, 0.9, 1  # 背景色を指定
-                        RoundedRectangle:
-                            pos: self.pos
-                            size: self.size
-                            radius: [20]  # 角を丸くする
-
-                    MDLabel:
-                        id: date_label
-                        text: "YYYY-MM-DD"
-                        halign: "center"
-                        theme_text_color: "Primary"
-                        font_style: "H4"
-
-                # 右側の画面 (適当なデータ)
-                MDBoxLayout:
-                    padding: [10, 20]  # 上下にパディングを追加
-
-                    canvas.before:
-                        Color:
-                            rgba: 0.9, 0.9, 0.9, 1  # 背景色を指定
-                        RoundedRectangle:
-                            pos: self.pos
-                            size: self.size
-                            radius: [20]  # 角を丸くする
-
-                    MDLabel:
-                        text: "Sample Data"
-                        halign: "center"
-                        theme_text_color: "Primary"
-                        font_style: "H4"
 
 <RTKSetupScreen>:
     name: 'setting'

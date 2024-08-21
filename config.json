@@ -1,1 +1,1 @@
-{"base_station": "guest:guest@160.16.134.72:80/CQ-F9P", "log_file": "C:/Users/\u6b66\u7530\u3000\u54f2\u58ebtakedasatoshi/csp/rowing_rtkapp/data/picture", "rover_to": "ttyACM1:230400", "rover_from": "ttyACM0:230400"}
+{"base_station": "guest:guest@160.16.134.72:80/CQ-F9P", "log_file": "C:/Users/sato1/OneDrive/\u30c7\u30b9\u30af\u30c8\u30c3\u30d7/csp/RowRTK_device", "rover_to": "ttyACM1:230400", "rover_from": "ttyACM0:230400"}

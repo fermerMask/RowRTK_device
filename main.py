@@ -5,17 +5,14 @@ from kivy.lang import Builder
 from kivymd.uix.filemanager import MDFileManager
 from tkinter import filedialog
 from kivy.uix.popup import Popup
-from RTKKib import rtklib
+from RTKKib.rtklib2 import NMEA,RTKController
+from RTKKib.configmanager import ConfigManager
 import os
 import json
 from datetime import datetime
 Window.size = (640,480)
 
-nmea = rtklib.NMEA
-logger = rtklib.Logger
-controller = rtklib.RTKController
-
-global screen
+global screen 
 
 screen = ScreenManager()
 
@@ -25,8 +22,8 @@ class SplashScreen(Screen):
 class MainScreen(Screen):
     pass
 
-class StandaloneScreen(Screen): 
-
+class StandaloneScreen(Screen):
+    config_file = 'config.json'
     def start_stop_toggle(self):
         if self.ids.start_stop_button.icon == "play":
             self.ids.start_stop_button.icon = "pause"
@@ -39,25 +36,50 @@ class StandaloneScreen(Screen):
             self.stop()
 
     def start(self):
-        controller.start()
-        print("start")
+        config_manager = ConfigManager(self.config_file)
+        base_station = config_manager.get_value('base_station')
+        folder = config_manager.get_value('log_file')
+        #controller.start()
+        print(base_station)
 
     def stop(self):
-        controller.stop()
+        #controller.stop()
         print("stop")
 
 class RTKActivationScreen(Screen):
-   pass
+    config_file = 'config.json'
+
+    def connect_toggle(self):
+        if self.ids.connect_button.icon == "lan-connect":
+            self.ids.connect_button.icon = "lan-disconnect"
+            self.ids.connect_button.text = "Pause"
+            #self.ids.stop_button.disable = False
+            self.start()
+        else:
+            self.ids.connect_button.icon = "lan-connect"
+            self.ids.connect_button.text = "Start"
+            self.stop()
+
+    def start(self):
+        config_manager = ConfigManager(self.config_file)
+        base_station = config_manager.get_value('base_station')
+        folder = config_manager.get_value('log_file')
+        #controller.start()
+        print(base_station)
+
+    def stop(self):
+        print("stop")
 
 class RTKSetupScreen(Screen):
-    config_file = 'config.json'
+
+    config_file = "config.json"  # 設定ファイルのパスを指定
 
     def select_directory(self):
         directory = filedialog.askdirectory()
         if directory:
             self.select_path(str(directory))
             
-    def select_path(self,path):
+    def select_path(self, path):
         self.ids.log_file.text = path
         self.save_config()
     
@@ -65,23 +87,27 @@ class RTKSetupScreen(Screen):
         self.load_config()
     
     def save_config(self):
-        config_data = {
-            'base_station':self.ids.base_station.text,
-            'log_file': self.ids.log_file.text,
-            'rover_to': self.ids.rover_to.text,
-            'rover_from': self.ids.rover_from.text
-        }
-        with open(self.config_file,'w') as f:
-            json.dump(config_data,f)
+        config_manager = ConfigManager(self.config_file)
+        config_data = config_manager.get_config()
+
+        # 現在の設定を更新
+        config_data['base_station'] = self.ids.base_station.text
+        config_data['log_file'] = self.ids.log_file.text
+        config_data['rover_to'] = self.ids.rover_to.text
+        config_data['rover_from'] = self.ids.rover_from.text
+
+        with open(self.config_file, 'w') as f:
+            json.dump(config_data, f)
     
     def load_config(self):
-        if os.path.exists(self.config_file):
-            with open(self.config_file,'r') as f:
-                config_data = json.load(f)
-            self.ids.base_station.text = config_data.get('base_station','')
-            self.ids.log_file.text = config_data.get('log_file','')
-            self.ids.rover_to.text = config_data.get('rover_to','')
-            self.ids.rover_from.text = config_data.get('rover_from','')
+        config_manager = ConfigManager(self.config_file)
+        config_data = config_manager.get_config()
+
+        # UIに設定を反映
+        self.ids.base_station.text = config_data.get('base_station', '')
+        self.ids.log_file.text = config_data.get('log_file', '')
+        self.ids.rover_to.text = config_data.get('rover_to', '')
+        self.ids.rover_from.text = config_data.get('rover_from', '')
     
     def on_base_station_changed(self):
         self.save_config()
