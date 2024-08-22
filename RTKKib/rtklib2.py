@@ -64,23 +64,29 @@ class Logger(threading.Thread):
         self.kill = False
         self.p_rtk = p_rtk
         d = datetime.datetime.utcnow() + datetime.timedelta(hours=9)
-        self.logfile = f'{logfile}-{d.year}-{d.month:02d}-{d.day:02d}-{d.hour:02d}-{d.minute:02d}-{d.second:02d}.nmea'
+        self.logfile = f'rtk-{d.year}-{d.month:02d}-{d.day:02d}-{d.hour:02d}-{d.minute:02d}-{d.second:02d}.nmea'
         self.t, self.lat, self.lon, self.mode, self.alt, self.vel = 0, 0, 0, 0, 0, 0
 
     def run(self):
-        with open(self.logfile, 'w') as f:
-            while not self.kill:
-                line = self.p_rtk.stdout.readline()
-                if line[3:6] == 'GGA':
-                    r = NMEA.parse_GGA(line)
-                    if r:
-                        self.t, self.lat, self.lon, self.mode, self.alt = r
-                elif line[3:6] == 'RMC':
-                    r = NMEA.parse_RMC(line)
-                    if r:
-                        self.t, self.lat, self.lon, self.vel = r
+        try:
+            with open(self.logfile, 'w') as f:
+                while not self.kill:
+                    line = self.p_rtk.stdout.readline()
+                    print(f"logging line:{line.strip()}")
+                    if line[3:6] == 'GGA':
+                        r = NMEA.parse_GGA(line)
+                        if r:
+                            self.t, self.lat, self.lon, self.mode, self.alt = r
+                        elif line[3:6] == 'RMC':
+                            r = NMEA.parse_RMC(line)
+                            if r:
+                                self.t, self.lat, self.lon, self.vel = r
 
-                f.write(line)
+                        f.write(line)
+                        f.flush()
+        except Exception as e:
+            print(f"error writing log file {e}")
+            
 
 class RTKController:
     base_cq = 'guest:guest@160.16.134.72:80/CQ-F9P'
@@ -95,10 +101,11 @@ class RTKController:
     rover_from = rover_from_mosaicx5
     # rover_to = rover_to_f9p
     # rover_from = rover_from_f9p
+    str2str = '/home/pll/RTKLIB-b34d/app/consapp/str2str/gcc/str2str'
 
     def __init__(self,update_callback=None):
         self.update_callback = update_callback
-        
+
 
     def info(self,message):
         print(message)
@@ -132,6 +139,7 @@ class RTKController:
         self.th_updater = threading.Thread(target=self.update_status,daemon=True)
         self.kill_update = False
         self.th_updater.start()
+
     """
     def update_status(self):
         logger = self.th_logger
@@ -159,19 +167,21 @@ class RTKController:
     def update_status(self):
         logger = self.th_logger
         while not self.kill_update:
-            t,lat,lon,alt,vel = logger.t, logger.lat, logger.lon, logger.mode,logger.alt,logger.vel
+            t,lat,lon,mode,alt,vel, = logger.t, logger.lat, logger.lon, logger.mode,logger.alt,logger.vel
             data = {
                 'time': t,
                 'latitude': lat,
                 'longitude': lon,
+                'mode': mode,
                 'alt': alt,
                 'velocity': vel
             }
+           # print(f"data: {data}")
+            if self.update_callback:
+                self.update_callback(data)
         
-        if self.update_callback:
-            self.update_callback(data)
+            time.sleep(0.5)
         
-        time.sleep(0.5)
     def stop(self):
         self.kill_update = True
         self.th_updater.kill = True
@@ -179,10 +189,11 @@ class RTKController:
 
         self.th_logger.kill = True
         self.th_logger.join()
-        self.p_rtk.stdin('~.')
+
+        self.p_rtk.stdin.write('~.\n')
         time.sleep(1)
         self.p_rtk.kill()
-
+        time.sleep(1)
         self.info(f'stop GNSS positioning.\n')
 
 
