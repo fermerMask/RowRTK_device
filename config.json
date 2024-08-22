@@ -1,1 +1,1 @@
-{"base_station": "guest:guest@160.16.134.72:80/CQ-F9P/", "log_file": "/home/pll/RowRTK_device/data/", "rover_to": "ttyACM1:230400", "rover_from": "ttyACM0:230400"}
+{"base_station": "guest:guest@160.16.134.72:80/CQ-F9P", "log_file": "/home/pll/RowRTK_device/data/", "rover_to": "ttyACM1:230400", "rover_from": "ttyACM0:230400"}
