@@ -50,18 +50,24 @@ class StandaloneScreen(Screen):
         rover_from = config_manager.get_value('rover_from')
         
         self.rtk_controller = RTKController(update_callback=self.update_display)
-    
+        self.rtk_controller.start(folder,rover_from)
+
+        if self.rtk_controller.update_callback:
+            print("Call back is set.")
+        else:
+            print("Call back is not set")
+
     def stop(self):
-        RTKController.stop()
+        self.rtk_controller.stop()
         print("stop")
 
     def update_display(self,data):
-        self.time = data['time']
-        self.latitude = data['latitude']
-        self.longitude = data['longitude']
-        self.mode = data['mode']
-        self.velocity = data['velocity']
-        self.alt = data['alt']
+        self.time = f"{float(data['time']):.3f}"       # 時間を小数第3位まで表示
+        self.latitude = f"{float(data['latitude']):.3f}"  # 緯度を小数第3位まで表示
+        self.longitude = f"{float(data['longitude']):.3f}" # 経度を小数第3位まで表示
+        self.velocity = f"{float(data['velocity']):.3f}"   # 速度を小数第3位まで表示
+        self.alt = f"{float(data['alt']):.3f}"           # 高度を小数第3位まで表示
+        self.mode = str(data['mode'])
 
 class RTKActivationScreen(Screen):
     config_file = 'config.json'
@@ -109,7 +115,7 @@ class RTKSetupScreen(Screen):
 
         # 現在の設定を更新
         config_data['base_station'] = self.ids.base_station.text
-        config_data['log_file'] = self.ids.log_file.text
+        config_data['log_file'] = self.ids.log_file.text + '/'
         config_data['rover_to'] = self.ids.rover_to.text
         config_data['rover_from'] = self.ids.rover_from.text
 
