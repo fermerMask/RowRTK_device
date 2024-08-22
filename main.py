@@ -115,7 +115,7 @@ class RTKSetupScreen(Screen):
 
         # 現在の設定を更新
         config_data['base_station'] = self.ids.base_station.text
-        config_data['log_file'] = self.ids.log_file.text + '/'
+        config_data['log_file'] = self.ids.log_file.text
         config_data['rover_to'] = self.ids.rover_to.text
         config_data['rover_from'] = self.ids.rover_from.text
 

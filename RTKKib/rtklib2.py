@@ -72,7 +72,7 @@ class Logger(threading.Thread):
             with open(self.logfile, 'w') as f:
                 while not self.kill:
                     line = self.p_rtk.stdout.readline()
-                    print(f"logging line:{line.strip()}")
+                    #print(f"logging line:{line.strip()}")
                     if line[3:6] == 'GGA':
                         r = NMEA.parse_GGA(line)
                         if r:
@@ -105,7 +105,6 @@ class RTKController:
 
     def __init__(self,update_callback=None):
         self.update_callback = update_callback
-
 
     def info(self,message):
         print(message)
