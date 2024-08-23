@@ -171,7 +171,7 @@ class RTKController:
                 'time': t,
                 'latitude': lat,
                 'longitude': lon,
-                'mode': mode,
+                'mode': NMEA.mode_names[mode],
                 'alt': alt,
                 'velocity': vel
             }

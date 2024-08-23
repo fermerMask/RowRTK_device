@@ -2,7 +2,6 @@ from kivymd.app import MDApp
 from kivy.uix.screenmanager import Screen, ScreenManager
 from kivy.core.window import Window
 from kivy.lang import Builder
-from kivymd.uix.filemanager import MDFileManager
 from tkinter import filedialog
 from kivy.uix.popup import Popup
 from RTKKib.rtklib2 import NMEA,RTKController
@@ -62,15 +61,21 @@ class StandaloneScreen(Screen):
         print("stop")
 
     def update_display(self,data):
-        self.time = f"{float(data['time']):.3f}"       # 時間を小数第3位まで表示
-        self.latitude = f"{float(data['latitude']):.3f}"  # 緯度を小数第3位まで表示
-        self.longitude = f"{float(data['longitude']):.3f}" # 経度を小数第3位まで表示
-        self.velocity = f"{float(data['velocity']):.3f}"   # 速度を小数第3位まで表示
-        self.alt = f"{float(data['alt']):.3f}"           # 高度を小数第3位まで表示
+        self.time = f"{float(data['time']):.3f}"       
+        self.latitude = f"{float(data['latitude']):.3f}"  
+        self.longitude = f"{float(data['longitude']):.3f}" 
+        self.velocity = f"{float(data['velocity']):.3f}"   
+        self.alt = f"{float(data['alt']):.3f}"          
         self.mode = str(data['mode'])
 
 class RTKActivationScreen(Screen):
     config_file = 'config.json'
+
+    velocity = StringProperty("0.00")
+    time = StringProperty("0:00.0")
+    longitude = StringProperty("000.0000")
+    latitude = StringProperty("00.0000")
+    mode = StringProperty("N/A")
 
     def connect_toggle(self):
         if self.ids.connect_button.icon == "lan-connect":
@@ -85,13 +90,31 @@ class RTKActivationScreen(Screen):
 
     def start(self):
         config_manager = ConfigManager(self.config_file)
-        base_station = config_manager.get_value('base_station')
+        
         folder = config_manager.get_value('log_file')
-        #controller.start()
-        print(base_station)
-
+        rover_from = config_manager.get_value('rover_from')
+        rover_to = config_manager.get_value('rover_to')
+        base = config_manager.get_value('base_station')
+        
+        self.rtk_controller = RTKController(update_callback=self.update_display)
+        
+        if self.rtk_controller.update_callback:
+            self.rtk_controller.connect_base(base=base,rover_to=rover_to)
+            self.rtk_controller.start(folder,rover_from)
+        else:
+            print("Call back is not set")
+        
     def stop(self):
+        self.rtk_controller.stop()
         print("stop")
+    
+    def update_display(self,data):
+        self.time = f"{float(data['time']):.3f}"       
+        self.latitude = f"{float(data['latitude']):.3f}"  
+        self.longitude = f"{float(data['longitude']):.3f}" 
+        self.velocity = f"{float(data['velocity']):.3f}"   
+        self.alt = f"{float(data['alt']):.3f}"          
+        self.mode = str(data['mode'])
 
 class RTKSetupScreen(Screen):
 

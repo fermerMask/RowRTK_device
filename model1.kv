@@ -61,21 +61,18 @@ ScreenManager:
                 text:"Setting"
                 on_release: 
                     app.root.current = 'setting'
-                    app.root.transition.direction = 'right'
             ElementCard:
                 image:"images/rowing-boat.png"
                 text:"Training Start"
                 subtext: 'only GPS'
                 on_release: 
                     app.root.current = 'standalone'
-                    app.root.transition.direction = 'up'
             ElementCard:
                 image:"images/gps.png"
                 text:"RTK Training Start"
                 subtext: 'Use RTK Positioning System'
                 on_release: 
                     app.root.current = 'rtkactivation'
-                    app.root.transition.direction = 'left'
 
 <ElementCard@MDCard>:
     md_bg_color: 120/255, 173/255, 173/255, 1
